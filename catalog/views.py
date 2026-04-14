@@ -46,3 +46,5 @@ def product_detail(request: HttpRequest, pk: int) -> HttpResponse:
     context = {"object": product, "title": f"Купить {product.product_name}"}
     return render(request, "catalog/product_detail.html", context)
 
+
+
