@@ -3,14 +3,19 @@
 {% block title %}Главная - Web Store Project{% endblock %}
 
 {% block content %}
-<div class="pricing-header px-3 py-3 pt-md-5 pb-md-4 mx-auto text-center">
+<div class="pricing-header px-3 py-1 pt-md-0.5 pb-md-4 mx-auto text-center">
     <h1 class="display-4">Web Store Project</h1>
     <p class="lead">Web Store Project - это приложение для управления каталогом товаров</p>
+    <div class="d-flex justify-content-center mt-3">
+        <a href="{% url 'catalog:add_product' %}" class="btn btn-success btn-lg px-5 shadow-sm">
+            <i class="bi bi-plus-circle"></i> + Добавить новый товар
+        </a>
+    </div>
 </div>
 
 <div class="container">
     <div class="row row-cols-1 row-cols-md-3 mb-3 text-center">
-        {% for object in object_list %}
+        {% for object in page_obj %}
         <div class="col">
             <div class="card mb-4 shadow-sm h-100">
                 <div class="card-header py-3">
@@ -18,7 +23,7 @@
                 </div>
                 <div class="card-body d-flex flex-column">
                     {% if object.image %}
-                        <img src="{{ object.image.url }}" class="img-fluid mb-3" alt="{{ object.product_name }}" style="max-height: 200px; object-fit: cover;">
+                        <img src="{{ object.image.url }}" class="img-fluid mb-3" alt="{{ object.product_name }}" style="max-height: 150px; object-fit: cover;">
                     {% else %}
                         <div class="bg-light mb-3 d-flex align-items-center justify-content-center" style="height: 200px;">
                             <span class="text-muted">Нет фото</span>
@@ -45,5 +50,6 @@
         </div>
         {% endfor %}
     </div>
+    {% include "catalog/includes/inc_pagination.html" %}
 </div>
 {% endblock %}

@@ -1,3 +1,5 @@
+from typing import Any
+
 from django.core.management import BaseCommand
 
 from catalog.models import Category, Product
@@ -6,7 +8,7 @@ from catalog.models import Category, Product
 class Command(BaseCommand):
     help = "Очищает БД и заполняет её тестовыми данными"
 
-    def handle(self, *args, **options):
+    def handle(self, *args: Any, **options: Any) -> None:
         # Очистка базы данных
         Product.objects.all().delete()
         Category.objects.all().delete()

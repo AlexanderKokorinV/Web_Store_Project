@@ -1,19 +1,29 @@
+from django.core.paginator import Paginator
 from django.http import HttpRequest, HttpResponse
-from django.shortcuts import render
+from django.shortcuts import redirect, render
 
+from .forms import ProductForm
 from .models import Contact, Product
 
 
 def home(request: HttpRequest) -> HttpResponse:
-    """Отображает главную страницу каталога."""
-    latest_products = Product.objects.order_by("-created_at")[:5]
+    """Отображает главную страницу каталога с навигацией."""
+    # Все товары, отсортированные по дате создания
+    product_list = Product.objects.all().order_by("-created_at")
 
-    print("\nПоследние 5 продуктов:")
-    for product in latest_products:
-        print(f"ID: {product.id} | Название: {product.product_name} | Дата: {product.created_at}")
-    print("-" * 25)
+    # Настройка пагинации (по 3 товара на страницу)
+    paginator = Paginator(product_list, 3)
 
-    context = {"object_list": latest_products}
+    # Получение номера текущей страницы из URL
+    page_number = request.GET.get("page")
+
+    # Получение объекта страницы
+    page_obj = paginator.get_page(page_number)
+
+    # Формирование контекста
+    context = {
+        "page_obj": page_obj,
+    }
 
     return render(request, "catalog/home.html", context)
 
@@ -47,4 +57,17 @@ def product_detail(request: HttpRequest, pk: int) -> HttpResponse:
     return render(request, "catalog/product_detail.html", context)
 
 
+def add_product(request: HttpRequest) -> HttpResponse:
+    """
+    Обрабатывает добавление нового товара.
+    Обрабатывает ввод данных и сохраняет новый товар в базу данных.
+    """
+    if request.method == "POST":
+        form = ProductForm(request.POST, request.FILES)
+        if form.is_valid():
+            form.save()
+            return redirect("catalog:home")  # Перевод на главную страницу после сохранения
+    else:
+        form = ProductForm()
 
+    return render(request, "catalog/product_form.html", {"form": form})
