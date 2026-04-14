@@ -14,7 +14,7 @@ class ProductAdmin(admin.ModelAdmin):
     list_filter = ("category_name",)
     search_fields = (
         "product_name",
-        "description",
+        "product_description",
     )
 
 

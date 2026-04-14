@@ -2,14 +2,14 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Skystore</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Web Store Project</title>
     <link rel="stylesheet" href="/static/css/bootstrap.min.css">
 
 </head>
 <body>
 <div class="d-flex flex-column flex-md-row align-items-center p-3 px-md-4 mb-3 bg-white border-bottom shadow-sm">
-    <h5 class="my-0 me-md-auto fw-normal">Skystore</h5>
+    <h5 class="my-0 me-md-auto fw-normal">Web Store Project</h5>
     <nav class="ms-md-5">
         <a class="p-2 btn btn-outline-primary" href="/">Каталог</a>
         <a class="p-2 btn btn-outline-primary" href="/contacts/">Контакты</a>
@@ -17,39 +17,55 @@
 </div>
 
 <div class="pricing-header px-3 py-3 pt-md-5 pb-md-4 mx-auto text-center">
-    <h1 class="display-4">Skystore</h1>
-    <p class="lead">Skystore - это отличный вариант хранения ваших плагинов и примеров кода, который вы бы хотели
-        продать</p>
+    <h1 class="display-4">Web Store Project</h1>
+    <p class="lead">Web Store Project - это приложение для управления каталогом товаров</p>
 </div>
 
 <div class="container">
-    <div class="row text-center justify-content-center">
-        <div class="col-md-6 col-lg-4">
-            <div class="card mb-4 shadow-sm">
+    <div class="row row-cols-1 row-cols-md-3 mb-3 text-center">
+        {% for object in object_list %}
+        <div class="col">
+            <div class="card mb-4 shadow-sm h-100"> <!-- h-100 выравнивает высоту карточек -->
                 <div class="card-header py-3">
-                    <h4 class="my-0 fw-normal">Удобный сервис рассылок</h4>
+                    <h4 class="my-0 fw-normal">{{ object.product_name }}</h4>
                 </div>
-                <div class="card-body">
-                    <h1 class="card-title pricing-card-title">$ 140</h1>
-                    <ul class="list-unstyled mt-3 mb-4 text-start ms-4">
-                        <li>- Неограниченная лицензия</li>
-                        <li>- Поддержка</li>
-                        <li>- Установка на сервер</li>
-                        <li>- Получение обновлений</li>
-                    </ul>
-                    <div class="d-grid">
+                <div class="card-body d-flex flex-column">
+                    {% if object.image %}
+                        <img src="{{ object.image.url }}" class="img-fluid mb-3" alt="{{ object.product_name }}" style="max-height: 200px; object-fit: cover;">
+                    {% else %}
+                        <div class="bg-light mb-3 d-flex align-items-center justify-content-center" style="height: 200px;">
+                            <span class="text-muted">Нет фото</span>
+                        </div>
+                    {% endif %}
+
+                    <h1 class="card-title pricing-card-title">{{ object.price }} руб.</h1>
+                    <p class="text-muted small">Категория: {{ object.category_name }}</p>
+
+                    <p class="card-text text-start flex-grow-1">
+                        <!-- Обрезка описания до 100 символов -->
+                        {{ object.product_description|truncatechars:100 }}
+                    </p>
+
+                    <div class="d-grid mt-3">
+                        <a href="{% url 'catalog:product_detail' pk=object.pk %}" class="btn btn-lg btn-outline-primary">Информация о товаре</a>
                         <button type="button" class="btn btn-lg btn-outline-primary">Купить</button>
                     </div>
                 </div>
             </div>
         </div>
+        {% empty %}
+        <div class="col-12 text-center">
+            <p class="lead">В каталоге пока нет ни одного товара.</p>
+        </div>
+        {% endfor %}
     </div>
+</div>
 
     <footer class="pt-4 my-md-5 pt-md-5 border-top">
         <div class="row">
             <div class="col-12 col-md">
-                SkyStore
-                <small class="d-block mb-3 text-muted">&copy; 2023</small>
+                Web Store Project
+                <small class="d-block mb-3 text-muted">&copy; 2026</small>
             </div>
             <div class="col-6 col-md">
                 <h5>Категории</h5>

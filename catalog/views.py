@@ -38,3 +38,11 @@ def contacts(request: HttpRequest) -> HttpResponse:
         print(f"Сообщение от {name} ({email}): {message}")
 
     return render(request, "catalog/contacts.html", {"contact": contact_data})
+
+
+def product_detail(request: HttpRequest, pk: int) -> HttpResponse:
+    """Отображает детальную информацию о конкретном товаре."""
+    product = Product.objects.get(pk=pk)
+    context = {"object": product, "title": f"Купить {product.product_name}"}
+    return render(request, "catalog/product_detail.html", context)
+
