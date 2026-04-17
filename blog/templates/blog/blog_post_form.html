@@ -8,8 +8,7 @@
                 <h2 class="card-title mb-4">
                     {% if object %} Редактирование статьи {% else %} Создание статьи {% endif %}
                 </h2>
-                
-                {# Атрибут enctype обязателен для загрузки изображений #}
+
                 <form method="post" enctype="multipart/form-data">
                     {% csrf_token %}
 

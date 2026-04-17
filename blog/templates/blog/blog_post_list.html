@@ -10,7 +10,7 @@
     <a href="{% url 'blog:add_blog_post' %}" class="btn btn-primary">Создать пост</a>
 </div>
 
-{% for post in object_list %} {# Запускаем цикл по всем статьям #}
+{% for post in object_list %}
     <article class="card mb-4 shadow-sm">
         <div class="card-body">
             <h2><a href="{% url 'blog:blog_post_detail' post.pk %}">{{ post.title }}</a></h2>
@@ -20,7 +20,6 @@
             {% endif %}
 
             <div class="content">
-                {# Показываем только первые 30 слов в списке #}
                 {{ post.content|truncatewords:30|linebreaks }}
             </div>
 
@@ -40,7 +39,7 @@
         </div>
     </article>
 {% empty %}
-    <div class="alert alert-info">Статей пока нет. Будьте первым, кто создаст запись!</div>
+    <div class="alert alert-info">Статей пока нет.</div>
 {% endfor %}
 
 {% endblock %}
