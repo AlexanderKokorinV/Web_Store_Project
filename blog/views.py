@@ -1,5 +1,7 @@
 from django.views.generic import CreateView, ListView, DetailView, UpdateView, DeleteView
 from django.urls import reverse_lazy, reverse
+from django.core.mail import send_mail
+from django.conf import settings
 
 from blog.models import BlogPost
 
@@ -30,6 +32,23 @@ class BlogPostDetailView(DetailView):
         self.object = super().get_object(queryset)
         self.object.views_count += 1
         self.object.save()
+
+        if self.object.views_count % 5 == 0:
+            full_url = self.request.build_absolute_uri(
+                reverse("blog:blog_post_detail", kwargs={"pk": self.object.pk})
+            )
+
+            send_mail(
+                subject=f"У статьи {self.object.views_count} просмотров!",
+                message=(
+                    f"Вау! Ваша статья '{self.object.title}'\n"
+                    f"набрала уже {self.object.views_count} просмотров!\n\n"
+                    f"Ссылка на статью: {full_url}"
+                ),
+                from_email=settings.EMAIL_HOST_USER,
+                recipient_list=["sanya.core@gmail.com"],
+            )
+
         return self.object
 
 # Update
