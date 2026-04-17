@@ -1,0 +1,33 @@
+{% extends "catalog/base.html" %}
+
+{% block title %}
+    {{ object.title|default:"Блог" }} - Web Store
+{% endblock %}
+
+{% block content %}
+<h1>{{ object.title|default: "Наш блог" }}</h1>
+    <article>
+        <h1>{{ object.title }}</h1>
+
+        {% if object.preview %}
+            <img src="{{ object.preview.url }}" alt="{{ object.title }}" class="img-fluid mb-3" style="max-width: 300px;">
+        {% endif %}
+
+        <div class="content">
+            {{ object.content|linebreaks }}
+        </div>
+
+        <hr>
+
+        <div class="text-muted">
+            <p>Просмотров: <strong>{{ object.views_count }}</strong></p>
+            <p>Дата публикации: {{ object.created_at|date:"d M Y" }}</p>
+        </div>
+
+        <div class="mt-4">
+            <a href="{% url 'blog:blog_post_update' object.pk %}" class="btn btn-warning">Редактировать</a>
+            <a href="{% url 'blog:blog_post_delete' object.pk %}" class="btn btn-danger">Удалить</a>
+            <a href="{% url 'blog:blog_post_list' %}" class="btn btn-secondary">Назад к списку</a>
+        </div>
+    </article>
+{% endblock %}
