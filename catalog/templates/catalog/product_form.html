@@ -10,7 +10,7 @@
                 <h3 class="card-title mb-0">Новый товар</h3>
             </div>
             <div class="card-body">
-                <form method="post" enctype="multipart/form-data"> <!-- enctype важен для фото -->
+                <form method="post" enctype="multipart/form-data">
                     {% csrf_token %}
                     {{ form.as_p }}
                     <div class="d-grid gap-2">
