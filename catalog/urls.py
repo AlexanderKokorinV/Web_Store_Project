@@ -1,7 +1,7 @@
 from django.urls import path
 
 from catalog.apps import CatalogConfig
-from catalog.views import ProductListView, ProductDetailView, ContactsTemplateView, ProductCreateView
+from catalog.views import ContactsTemplateView, ProductCreateView, ProductDetailView, ProductListView
 
 APP_NAME = CatalogConfig.name
 

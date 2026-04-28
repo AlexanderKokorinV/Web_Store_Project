@@ -1,13 +1,14 @@
 from django import forms
 from django.core.exceptions import ValidationError
 from django.core.validators import FileExtensionValidator
+
 from .models import Product
 
 
 class ProductForm(forms.ModelForm):
     """Класс формы для добавления нового товара"""
 
-    forbidden_words = ["казино", "криптовалюта", "крипта", "биржа", "дешево","бесплатно", "обман", "полиция", "радар"]
+    forbidden_words = ["казино", "криптовалюта", "крипта", "биржа", "дешево", "бесплатно", "обман", "полиция", "радар"]
 
     class Meta:
         model = Product
@@ -16,34 +17,45 @@ class ProductForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super(ProductForm, self).__init__(*args, **kwargs)
 
-        self.fields["product_name"].widget.attrs.update({
-            "class": "form-control",
-            "placeholder": "Введите наименование продукта",
-        })
+        self.fields["product_name"].widget.attrs.update(
+            {
+                "class": "form-control",
+                "placeholder": "Введите наименование продукта",
+            }
+        )
 
-        self.fields["product_description"].widget.attrs.update({
-            "class": "form-control",
-            "rows": 3,
-            "placeholder": "Введите описание продукта",
-        })
+        self.fields["product_description"].widget.attrs.update(
+            {
+                "class": "form-control",
+                "rows": 3,
+                "placeholder": "Введите описание продукта",
+            }
+        )
 
-        self.fields["image"].widget.attrs.update({
-            "class": "form-control",
-        })
+        self.fields["image"].widget.attrs.update(
+            {
+                "class": "form-control",
+            }
+        )
 
         self.fields["image"].validators.append(
             FileExtensionValidator(
                 allowed_extensions=["jpeg", "jpg", "png"],
-                message="Недопустимый формат файла. Допустимы только JPEG, JPG и PNG.")
+                message="Недопустимый формат файла. Допустимы только JPEG, JPG и PNG.",
+            )
         )
 
-        self.fields["category_name"].widget.attrs.update({
-            "class": "form-control",
-        })
+        self.fields["category_name"].widget.attrs.update(
+            {
+                "class": "form-control",
+            }
+        )
 
-        self.fields["price"].widget.attrs.update({
-            "class": "form-control",
-        })
+        self.fields["price"].widget.attrs.update(
+            {
+                "class": "form-control",
+            }
+        )
 
     def clean_product_name(self):
         cleaned_data = self.cleaned_data.get("product_name")
@@ -67,7 +79,7 @@ class ProductForm(forms.ModelForm):
         image = self.cleaned_data.get("image")
 
         if image:
-            max_size = 5*1024*1024
+            max_size = 5 * 1024 * 1024
             if image.size > max_size:
                 raise ValidationError("Размер файла не должен превышать 5 МБ.")
 

@@ -1,6 +1,6 @@
 from django.shortcuts import redirect
-from django.views.generic import ListView, DetailView, CreateView, TemplateView
 from django.urls import reverse_lazy
+from django.views.generic import CreateView, DetailView, ListView, TemplateView
 
 from .forms import ProductForm
 from .models import Contact, Product
@@ -8,7 +8,7 @@ from .models import Contact, Product
 
 class ProductListView(ListView):
     model = Product
-    template_name = "catalog/home.html" # Путь к шаблону
+    template_name = "catalog/home.html"  # Путь к шаблону
     context_object_name = "product_list"
     paginate_by = 3
     ordering = ["-created_at"]
@@ -43,7 +43,7 @@ class ContactsTemplateView(TemplateView):
         return context
 
     def post(self, request, *args, **kwargs):
-        """"Обработка POST-запроса (данных из формы)"""
+        """ "Обработка POST-запроса (данных из формы)"""
         name = request.POST.get("name")
         email = request.POST.get("email")
         message = request.POST.get("message")
@@ -51,6 +51,7 @@ class ContactsTemplateView(TemplateView):
         print(f"Сообщение от {name}, {email}: {message}")
 
         return redirect(self.success_url)
+
 
 # Ниже в комментариях код с использованием FBV:
 
