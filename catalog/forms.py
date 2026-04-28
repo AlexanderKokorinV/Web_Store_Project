@@ -34,7 +34,7 @@ class ProductForm(forms.ModelForm):
         self.fields["image"].validators.append(
             FileExtensionValidator(
                 allowed_extensions=["jpeg", "jpg", "png"],
-                message="Неверный формат файла. Разрешены только JPEG, JPG и PNG.")
+                message="Недопустимый формат файла. Допустимы только JPEG, JPG и PNG.")
         )
 
         self.fields["category_name"].widget.attrs.update({
