@@ -1,0 +1,80 @@
+[
+{
+    "model": "catalog.product",
+    "pk": 8,
+    "fields": {
+        "product_name": "Samsung Galaxy C23 Ultra",
+        "product_description": "256GB, Серый цвет, 200MP камера",
+        "image": "",
+        "category_name": 5,
+        "price": "59990.00",
+        "created_at": "2026-04-10T16:23:25.731Z",
+        "updated_at": "2026-04-10T16:23:25.731Z"
+    }
+},
+{
+    "model": "catalog.product",
+    "pk": 9,
+    "fields": {
+        "product_name": "Xiaomi Redmi Note 11",
+        "product_description": "1024GB, Синий",
+        "image": "",
+        "category_name": 5,
+        "price": "12790.00",
+        "created_at": "2026-04-10T16:24:46.733Z",
+        "updated_at": "2026-04-10T16:24:46.733Z"
+    }
+},
+{
+    "model": "catalog.product",
+    "pk": 11,
+    "fields": {
+        "product_name": "Samsung 55 QLED 4K",
+        "product_description": "Фоновая подсветка",
+        "image": "",
+        "category_name": 6,
+        "price": "75900.00",
+        "created_at": "2026-04-10T16:27:49.405Z",
+        "updated_at": "2026-04-10T16:27:49.405Z"
+    }
+},
+{
+    "model": "catalog.product",
+    "pk": 12,
+    "fields": {
+        "product_name": "Ноутбук HUAWEI MateBook",
+        "product_description": "D 16 2024 MCLG-X серый",
+        "image": "",
+        "category_name": 7,
+        "price": "57499.00",
+        "created_at": "2026-04-10T16:28:56.909Z",
+        "updated_at": "2026-04-10T16:28:56.909Z"
+    }
+},
+{
+    "model": "catalog.product",
+    "pk": 13,
+    "fields": {
+        "product_name": "Ноутбук HONOR MagicBook",
+        "product_description": "X16 AMD 2025 серый",
+        "image": "",
+        "category_name": 7,
+        "price": "64999.00",
+        "created_at": "2026-04-10T16:30:07.869Z",
+        "updated_at": "2026-04-10T16:30:07.869Z"
+    }
+},
+{
+    "model": "catalog.product",
+    "pk": 14,
+    "fields": {
+        "product_name": "Портативная аудиосистема Fiero Emotion",
+        "product_description": "200 FR1000, черный",
+        "image": "",
+        "category_name": 8,
+        "price": "11799.00",
+        "created_at": "2026-04-10T16:31:27.220Z",
+        "updated_at": "2026-04-10T16:31:27.220Z"
+    }
+}
+]
