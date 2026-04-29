@@ -4,11 +4,21 @@ from django.core.validators import FileExtensionValidator
 
 from .models import Product
 
+FORBIDDEN_WORDS = [
+    "казино",
+    "криптовалюта",
+    "крипта",
+    "биржа",
+    "дешево",
+    "бесплатно",
+    "обман",
+    "полиция",
+    "радар",
+]
+
 
 class ProductForm(forms.ModelForm):
     """Класс формы для добавления нового товара"""
-
-    forbidden_words = ["казино", "криптовалюта", "крипта", "биржа", "дешево", "бесплатно", "обман", "полиция", "радар"]
 
     class Meta:
         model = Product
@@ -58,22 +68,16 @@ class ProductForm(forms.ModelForm):
         )
 
     def clean_product_name(self):
-        cleaned_data = self.cleaned_data.get("product_name")
-
-        if cleaned_data:
-            for word in self.forbidden_words:
-                if word.lower() in cleaned_data.lower():
-                    raise ValidationError(f"Вы не можете использовать слово '{word}' в названии продукта")
-        return cleaned_data
+        value = self.cleaned_data.get("product_name")
+        if value and any(word in value.lower() for word in FORBIDDEN_WORDS):
+            raise ValidationError("Название содержит запрещенные слова.")
+        return value
 
     def clean_product_description(self):
-        cleaned_data = self.cleaned_data.get("product_description")
-
-        if cleaned_data:
-            for word in self.forbidden_words:
-                if word.lower() in cleaned_data.lower():
-                    raise ValidationError(f"Вы не можете использовать слово '{word}' в описании продукта")
-        return cleaned_data
+        value = self.cleaned_data.get("product_description")
+        if value and any(word in value.lower() for word in FORBIDDEN_WORDS):
+            raise ValidationError("Описание содержит запрещенные слова.")
+        return value
 
     def clean_image(self):
         image = self.cleaned_data.get("image")

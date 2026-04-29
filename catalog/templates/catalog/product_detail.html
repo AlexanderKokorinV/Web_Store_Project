@@ -40,6 +40,15 @@
                 <button type="button" class="btn btn-primary btn-lg px-4 me-md-2">Добавить в корзину</button>
                 <a href="{% url 'catalog:home' %}" class="btn btn-outline-secondary btn-lg px-4">Назад в каталог</a>
             </div>
+            <div class="mt-3">
+            <div class="d-flex gap-2">
+                <a href="{% url 'catalog:update_product' object.pk %}" class="btn btn-sm btn-outline-primary">
+                    <i class="bi bi-pencil"></i> Редактировать
+                </a>
+                <a href="{% url 'catalog:delete_product' object.pk %}" class="btn btn-sm btn-outline-danger">
+                    <i class="bi bi-trash"></i> Удалить
+                </a>
+            </div>
         </div>
     </div>
 </div>
