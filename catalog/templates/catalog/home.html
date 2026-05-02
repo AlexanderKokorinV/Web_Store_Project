@@ -7,9 +7,15 @@
     <h1 class="display-4">Web Store Project</h1>
     <p class="lead">Web Store Project - это приложение для управления каталогом товаров</p>
     <div class="d-flex justify-content-center mt-3">
-        <a href="{% url 'catalog:add_product' %}" class="btn btn-success btn-lg px-5 shadow-sm">
-            <i class="bi bi-plus-circle"></i> + Добавить новый товар
-        </a>
+        {% if user.is_authenticated %}
+            <a href="{% url 'catalog:add_product' %}" class="btn btn-success btn-lg px-5 shadow-sm">
+                <i class="bi bi-plus-circle"></i> + Добавить новый товар
+            </a>
+        {% else %}
+            <a href="{% url 'users:login' %}" class="btn btn-outline-success btn-lg px-5 shadow-sm">
+                <i class="bi bi-lock"></i> Войдите, чтобы добавить товар
+            </a>
+        {% endif %}
     </div>
 </div>
 
@@ -49,10 +55,11 @@
                 </div>
             </div>
         </div>
+        {% empty %}
+            <div class="col-12 text-center">
+                <p class="lead">В каталоге пока нет ни одного товара.</p>
+            </div>
         {% endfor %}
-        <div class="col-12 text-center">
-            <p class="lead">В каталоге пока нет ни одного товара.</p>
-        </div>
     </div>
     {% include "catalog/includes/inc_pagination.html" %}
 </div>

@@ -1,13 +1,14 @@
 import secrets
-
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.views import LoginView
 from django.core.mail import send_mail
 from django.urls import reverse_lazy, reverse
-from django.views.generic import CreateView
-from users.forms import UserRegisterForm, UserLoginForm
+from django.views.generic import CreateView, UpdateView
+from users.forms import UserRegisterForm, UserLoginForm, UserProfileForm
 from users.models import User
 from django.conf import settings
 from django.shortcuts import get_object_or_404, redirect
+from django.contrib.messages.views import SuccessMessageMixin
 
 class UserRegisterView(CreateView):
     model = User
@@ -43,3 +44,13 @@ def email_verification(request, token):
 class CustomLoginView(LoginView):
     form_class = UserLoginForm
     template_name = "users/login.html"
+
+class ProfileUpdateView(LoginRequiredMixin, SuccessMessageMixin, UpdateView):
+    form_class = UserProfileForm
+    template_name = "users/profile.html"
+    success_url = reverse_lazy("users:profile")
+    success_message = "Профиль успешно обновлен!"
+
+    def get_object(self, queryset=None):
+        return self.request.user
+

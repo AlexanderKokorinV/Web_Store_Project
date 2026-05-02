@@ -42,3 +42,15 @@ class UserLoginForm(AuthenticationForm):
         "placeholder": "Введите пароль",
     }))
 
+class UserProfileForm(forms.ModelForm):
+    class Meta:
+        model = User
+        fields = ["first_name", "last_name", "phone_number", "avatar", "country"]
+
+    def __init__(self, *args, **kwargs):
+        super(UserProfileForm, self).__init__(*args, **kwargs)
+        for field_name, field in self.fields.items():
+            field.widget.attrs.update({
+                "class": "form-control",
+            })
+
