@@ -9,10 +9,15 @@
                 <li class="nav-item">
                     <a class="nav-link" href="{% url 'catalog:home' %}">Главная</a>
                 </li>
-                {% if user.s_athenticated %}
-                <li class="nav-item">
-                    <a class="nav-link" href="{% url 'users:logout' %}">Выйти</a>
-                </li>
+                {% if user.is_authenticated %}
+                    <li class="nav-item d-flex align-items-center">
+                        <form method="post" action="{% url 'users:logout' %}" class="d-inline m-0 p-0">
+                            {% csrf_token %}
+                            <button type="submit" class="btn btn-link nav-link m-0 p-0 border-0" style="line-height: inherit;">
+                                Выйти
+                            </button>
+                        </form>
+                    </li>
                 {% else %}
                 <li class="nav-item">
                     <a class="nav-link" href="{% url 'users:login' %}">Войти</a>

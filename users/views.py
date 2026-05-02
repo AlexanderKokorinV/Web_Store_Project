@@ -1,7 +1,13 @@
-from django.urls import reverse_lazy
+import secrets
+
+from django.contrib.auth.views import LoginView
+from django.core.mail import send_mail
+from django.urls import reverse_lazy, reverse
 from django.views.generic import CreateView
-from users.forms import UserRegisterForm
+from users.forms import UserRegisterForm, UserLoginForm
 from users.models import User
+from django.conf import settings
+from django.shortcuts import get_object_or_404, redirect
 
 class UserRegisterView(CreateView):
     model = User
@@ -12,4 +18,28 @@ class UserRegisterView(CreateView):
     def form_valid(self, form):
         user = form.save() # Сохраняем пользователя
         user.is_active = False
+        token = secrets.token_hex(16)
+        user.token = token
+        user.save()
 
+        host = self.request.get_host()
+        url = f"http://{host}/users/email-confirm/{user.token}/"
+
+        send_mail(
+            subject="Подтверждение почты",
+            message=f"Здравствуйте, {user.email}! Спасибо за регистрацию на нашем сайте! Для подтверждения почты перейдите по ссылке: {url}",
+            from_email=settings.EMAIL_HOST_USER,
+            recipient_list=[user.email],
+        )
+        return super().form_valid(form)
+
+def email_verification(request, token):
+    user = get_object_or_404(User, token=token)
+    user.is_active = True
+    user.token = None
+    user.save()
+    return redirect(reverse("users:login"))
+
+class CustomLoginView(LoginView):
+    form_class = UserLoginForm
+    template_name = "users/login.html"

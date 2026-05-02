@@ -10,7 +10,14 @@
                 <div class="card-body">
                     <form method="post">
                         {% csrf_token %}
-                        {{ form.as_p }}
+                        {% for field in form %}
+                            <div class="mb-3">
+                                {{ field }}
+                                {% if field.errors %}
+                                    <div class="text-danger small">{{ field.errors|striptags }}</div>
+                                {% endif %}
+                            </div>
+                        {% endfor %}
                         <div class="d-grid gap-2 mt-4">
                             <button type="submit" class="btn btn-success">
                                 Зарегистрироваться
