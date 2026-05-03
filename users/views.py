@@ -9,6 +9,7 @@ from users.models import User
 from django.conf import settings
 from django.shortcuts import get_object_or_404, redirect
 from django.contrib.messages.views import SuccessMessageMixin
+from django.contrib import messages
 
 class UserRegisterView(CreateView):
     model = User
@@ -21,6 +22,10 @@ class UserRegisterView(CreateView):
         user.is_active = False
         token = secrets.token_hex(16)
         user.token = token
+        messages.success(
+            self.request,
+            f"Регистрация почти завершена! На адрес {user.email} отправлена ссылка для подтверждения вашей почты."
+        )
         user.save()
 
         host = self.request.get_host()

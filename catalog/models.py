@@ -1,6 +1,7 @@
 from typing import Any
 
 from django.db import models
+from django.conf import settings
 
 
 class Product(models.Model):
@@ -26,6 +27,14 @@ class Product(models.Model):
     )
     created_at: models.DateTimeField = models.DateTimeField(auto_now_add=True, verbose_name="Дата создания")
     updated_at: models.DateTimeField = models.DateTimeField(auto_now=True, verbose_name="Дата последнего изменения")
+    owner: models.ForeignKey = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.SET_NULL,
+        verbose_name="Владелец",
+        help_text="Тот, кто добавил продукт",
+        blank=True,
+        null=True,
+    )
 
     class Meta:
         verbose_name = "Продукт"
