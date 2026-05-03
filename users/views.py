@@ -1,15 +1,18 @@
 import secrets
+
+from django.conf import settings
+from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.views import LoginView
-from django.core.mail import send_mail
-from django.urls import reverse_lazy, reverse
-from django.views.generic import CreateView, UpdateView
-from users.forms import UserRegisterForm, UserLoginForm, UserProfileForm
-from users.models import User
-from django.conf import settings
-from django.shortcuts import get_object_or_404, redirect
 from django.contrib.messages.views import SuccessMessageMixin
-from django.contrib import messages
+from django.core.mail import send_mail
+from django.shortcuts import get_object_or_404, redirect
+from django.urls import reverse, reverse_lazy
+from django.views.generic import CreateView, UpdateView
+
+from users.forms import UserLoginForm, UserProfileForm, UserRegisterForm
+from users.models import User
+
 
 class UserRegisterView(CreateView):
     model = User
@@ -18,13 +21,13 @@ class UserRegisterView(CreateView):
     success_url = reverse_lazy("users:login")
 
     def form_valid(self, form):
-        user = form.save() # Сохраняем пользователя
+        user = form.save()  # Сохраняем пользователя
         user.is_active = False
         token = secrets.token_hex(16)
         user.token = token
         messages.success(
             self.request,
-            f"Регистрация почти завершена! На адрес {user.email} отправлена ссылка для подтверждения вашей почты."
+            f"Регистрация почти завершена! На адрес {user.email} отправлена ссылка для подтверждения вашей почты.",
         )
         user.save()
 
@@ -39,6 +42,7 @@ class UserRegisterView(CreateView):
         )
         return super().form_valid(form)
 
+
 def email_verification(request, token):
     user = get_object_or_404(User, token=token)
     user.is_active = True
@@ -46,9 +50,11 @@ def email_verification(request, token):
     user.save()
     return redirect(reverse("users:login"))
 
+
 class CustomLoginView(LoginView):
     form_class = UserLoginForm
     template_name = "users/login.html"
+
 
 class ProfileUpdateView(LoginRequiredMixin, SuccessMessageMixin, UpdateView):
     form_class = UserProfileForm
@@ -58,4 +64,3 @@ class ProfileUpdateView(LoginRequiredMixin, SuccessMessageMixin, UpdateView):
 
     def get_object(self, queryset=None):
         return self.request.user
-

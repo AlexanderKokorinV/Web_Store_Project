@@ -4,10 +4,10 @@ from catalog.apps import CatalogConfig
 from catalog.views import (
     ContactsTemplateView,
     ProductCreateView,
+    ProductDeleteView,
     ProductDetailView,
     ProductListView,
     ProductUpdateView,
-    ProductDeleteView,
 )
 
 APP_NAME = CatalogConfig.name

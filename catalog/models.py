@@ -1,7 +1,7 @@
 from typing import Any
 
-from django.db import models
 from django.conf import settings
+from django.db import models
 
 
 class Product(models.Model):

@@ -1,7 +1,7 @@
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import redirect
 from django.urls import reverse_lazy
-from django.views.generic import CreateView, DetailView, ListView, TemplateView, UpdateView, DeleteView
+from django.views.generic import CreateView, DeleteView, DetailView, ListView, TemplateView, UpdateView
 
 from .forms import ProductForm
 from .models import Contact, Product
@@ -31,6 +31,12 @@ class ProductCreateView(LoginRequiredMixin, CreateView):
     template_name = "catalog/product_form.html"
 
     success_url = reverse_lazy("catalog:home")
+
+    def form_valid(self, form):
+        product = form.save(commit=False)
+        product.owner = self.request.user  # Назначаем владельца
+        product.save()
+        return super().form_valid(form)
 
 
 class ProductUpdateView(LoginRequiredMixin, UpdateView):

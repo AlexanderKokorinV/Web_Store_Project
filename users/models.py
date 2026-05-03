@@ -3,42 +3,22 @@ from django.db import models
 
 
 class User(AbstractUser):
-    username = None # Удаляем стандартное поле username
-    email = models.EmailField(
-        unique=True,
-        verbose_name="email"
-    )
+    username = None  # Удаляем стандартное поле username
+    email = models.EmailField(unique=True, verbose_name="email")
 
     phone_number = models.CharField(
-        max_length=15,
-        verbose_name="Номер телефона",
-        blank=True,
-        null=True,
-        help_text="Введите номер телефона"
+        max_length=15, verbose_name="Номер телефона", blank=True, null=True, help_text="Введите номер телефона"
     )
 
     avatar = models.ImageField(
-        upload_to="users/avatars/",
-        verbose_name="Аватар",
-        blank=True,
-        null=True,
-        help_text="Загрузите аватар"
+        upload_to="users/avatars/", verbose_name="Аватар", blank=True, null=True, help_text="Загрузите аватар"
     )
 
     country = models.CharField(
-        max_length=50,
-        verbose_name="Страна",
-        blank=True,
-        null=True,
-        help_text="Введите вашу страну"
+        max_length=50, verbose_name="Страна", blank=True, null=True, help_text="Введите вашу страну"
     )
 
-    token = models.CharField(
-        max_length=100,
-        verbose_name="Token",
-        blank=True,
-        null=True
-    )
+    token = models.CharField(max_length=100, verbose_name="Token", blank=True, null=True)
 
     USERNAME_FIELD = "email"
     REQUIRED_FIELDS = []
@@ -49,6 +29,3 @@ class User(AbstractUser):
 
     def __str__(self):
         return self.email
-
-
-

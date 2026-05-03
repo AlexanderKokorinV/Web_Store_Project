@@ -1,6 +1,8 @@
-from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django import forms
+from django.contrib.auth.forms import AuthenticationForm, UserCreationForm
+
 from users.models import User
+
 
 class UserRegisterForm(UserCreationForm):
     class Meta:
@@ -27,20 +29,32 @@ class UserRegisterForm(UserCreationForm):
         self.fields["password2"].label = "Подтвердите пароль"
         self.fields["password2"].help_text = ""
         for field_name, field in self.fields.items():
-            field.widget.attrs.update({
-                "class": "form-control",
-                "placeholder": field.label,
-            })
+            field.widget.attrs.update(
+                {
+                    "class": "form-control",
+                    "placeholder": field.label,
+                }
+            )
+
 
 class UserLoginForm(AuthenticationForm):
-    username = forms.EmailField(widget=forms.EmailInput(attrs={
-        "class": "form-control",
-        "placeholder": "Введите ваш Email",
-    }))
-    password = forms.CharField(widget=forms.PasswordInput(attrs={
-        "class": "form-control",
-        "placeholder": "Введите пароль",
-    }))
+    username = forms.EmailField(
+        widget=forms.EmailInput(
+            attrs={
+                "class": "form-control",
+                "placeholder": "Введите ваш Email",
+            }
+        )
+    )
+    password = forms.CharField(
+        widget=forms.PasswordInput(
+            attrs={
+                "class": "form-control",
+                "placeholder": "Введите пароль",
+            }
+        )
+    )
+
 
 class UserProfileForm(forms.ModelForm):
     class Meta:
@@ -50,7 +64,8 @@ class UserProfileForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super(UserProfileForm, self).__init__(*args, **kwargs)
         for field_name, field in self.fields.items():
-            field.widget.attrs.update({
-                "class": "form-control",
-            })
-
+            field.widget.attrs.update(
+                {
+                    "class": "form-control",
+                }
+            )

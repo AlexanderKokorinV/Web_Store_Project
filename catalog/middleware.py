@@ -8,11 +8,13 @@ class CatalogAccessMiddleware:
 
     def __call__(self, request):
 
-        if any([
-            request.path.startswith("/admin/"),
-            request.path.startswith("/static/"),
-            request.path.startswith("/media/"),
-        ]):
+        if any(
+            [
+                request.path.startswith("/admin/"),
+                request.path.startswith("/static/"),
+                request.path.startswith("/media/"),
+            ]
+        ):
             return self.get_response(request)
 
         allowed_paths = [
