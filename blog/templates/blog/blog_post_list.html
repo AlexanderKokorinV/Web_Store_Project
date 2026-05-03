@@ -1,0 +1,45 @@
+{% extends "catalog/base.html" %}
+
+{% block title %}
+    Блог - Web Store
+{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h1>Наш блог</h1>
+    <a href="{% url 'blog:add_blog_post' %}" class="btn btn-primary">Создать пост</a>
+</div>
+
+{% for post in object_list %}
+    <article class="card mb-4 shadow-sm">
+        <div class="card-body">
+            <h2><a href="{% url 'blog:blog_post_detail' post.pk %}">{{ post.title }}</a></h2>
+
+            {% if post.preview %}
+                <img src="{{ post.preview.url }}" alt="{{ post.title }}" class="img-fluid mb-3" style="max-width: 200px;">
+            {% endif %}
+
+            <div class="content">
+                {{ post.content|truncatewords:30|linebreaks }}
+            </div>
+
+            <hr>
+
+            <div class="d-flex justify-content-between align-items-center">
+                <div class="text-muted small">
+                    <span>Просмотров: <strong>{{ post.views_count }}</strong></span> |
+                    <span>Дата: {{ post.created_at|date:"d M Y" }}</span>
+                </div>
+
+                <div class="btn-group">
+                    <a href="{% url 'blog:blog_post_update' post.pk %}" class="btn btn-sm btn-outline-warning">Редактировать</a>
+                    <a href="{% url 'blog:blog_post_delete' post.pk %}" class="btn btn-sm btn-outline-danger">Удалить</a>
+                </div>
+            </div>
+        </div>
+    </article>
+{% empty %}
+    <div class="alert alert-info">Статей пока нет.</div>
+{% endfor %}
+
+{% endblock %}
