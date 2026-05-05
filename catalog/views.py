@@ -1,6 +1,8 @@
-from django.contrib.auth.mixins import LoginRequiredMixin
-from django.shortcuts import redirect
-from django.urls import reverse_lazy
+from django.contrib import messages
+from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
+from django.shortcuts import redirect, get_object_or_404
+from django.urls import reverse_lazy, reverse
+from django.views import View
 from django.views.generic import CreateView, DeleteView, DetailView, ListView, TemplateView, UpdateView
 
 from .forms import ProductForm
@@ -25,7 +27,7 @@ class ProductDetailView(LoginRequiredMixin, DetailView):
         return context
 
 
-class ProductCreateView(LoginRequiredMixin, CreateView):
+class ProductCreateView(LoginRequiredMixin, PermissionRequiredMixin, CreateView):
     model = Product
     form_class = ProductForm
     template_name = "catalog/product_form.html"
@@ -39,18 +41,45 @@ class ProductCreateView(LoginRequiredMixin, CreateView):
         return super().form_valid(form)
 
 
-class ProductUpdateView(LoginRequiredMixin, UpdateView):
+class ProductUpdateView(LoginRequiredMixin, PermissionRequiredMixin, UpdateView):
     model = Product
     form_class = ProductForm
     template_name = "catalog/product_form.html"
-
+    permission_required = "catalog:change_product"
     success_url = reverse_lazy("catalog:product_list")
+
+    def form_valid(self, form_class=None):
+        form = super().get_form(form_class)
+        user = self.request.user
+
+        if not user.has_perm("catalog:change_product"):
+            del form.fields["is_published"]
+
+        return form
 
 
 class ProductDeleteView(LoginRequiredMixin, DeleteView):
     model = Product
-
+    permission_required = "catalog:delete_product"
     success_url = reverse_lazy("catalog:product_list")
+
+
+class ProductTogglePublishView(PermissionRequiredMixin, View):
+    permission_required = "catalog.can_unpublish_product"
+
+    def get(self, request, pk):
+        product = get_object_or_404(Product, pk=pk)
+
+        if product.is_published:
+            product.is_published = False
+            messages.warning(request, f"Продукт '{product.product_name}' снят с публикации.")
+        else:
+            product.is_published = True
+            messages.success(request, f"Продукт '{product.product_name}' успешно опубликован!")
+
+        product.save()
+
+        return redirect(reverse("catalog:product_detail", args=[product.pk]))
 
 
 class ContactsTemplateView(TemplateView):

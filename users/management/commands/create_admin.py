@@ -11,3 +11,4 @@ class Command(BaseCommand):
         user.is_admin = True
         user.is_superuser = True
         user.save()
+        self.stdout.write(self.style.SUCCESS("Суперпользователь создан"))
