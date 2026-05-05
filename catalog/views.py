@@ -1,5 +1,6 @@
 from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
+from django.core.exceptions import PermissionDenied
 from django.shortcuts import redirect, get_object_or_404
 from django.urls import reverse_lazy, reverse
 from django.views import View
@@ -27,7 +28,7 @@ class ProductDetailView(LoginRequiredMixin, DetailView):
         return context
 
 
-class ProductCreateView(LoginRequiredMixin, PermissionRequiredMixin, CreateView):
+class ProductCreateView(LoginRequiredMixin, CreateView):
     model = Product
     form_class = ProductForm
     template_name = "catalog/product_form.html"
@@ -41,27 +42,43 @@ class ProductCreateView(LoginRequiredMixin, PermissionRequiredMixin, CreateView)
         return super().form_valid(form)
 
 
-class ProductUpdateView(LoginRequiredMixin, PermissionRequiredMixin, UpdateView):
+class ProductUpdateView(LoginRequiredMixin, UpdateView):
     model = Product
     form_class = ProductForm
     template_name = "catalog/product_form.html"
-    permission_required = "catalog:change_product"
-    success_url = reverse_lazy("catalog:product_list")
+    success_url = reverse_lazy("catalog:home")
 
-    def form_valid(self, form_class=None):
-        form = super().get_form(form_class)
+    def get_object(self, queryset=None):
+        self.object = super().get_object(queryset)
         user = self.request.user
 
-        if not user.has_perm("catalog:change_product"):
-            del form.fields["is_published"]
+        # Логика: если НЕ владелец И НЕ модератор И НЕ суперюзер -> Вход воспрещен
+        if self.object.owner != user and not user.has_perm("catalog.can_unpublish_product") and not user.is_superuser:
+            raise PermissionDenied
 
+        return self.object
+
+    def get_form(self, form_class=None):
+        form = super().get_form(form_class)
+        # Скрываем поле только для тех, кто не модератор
+        if not self.request.user.has_perm("catalog.can_unpublish_product"):
+            if "is_published" in form.fields:
+                del form.fields["is_published"]
         return form
 
 
 class ProductDeleteView(LoginRequiredMixin, DeleteView):
     model = Product
-    permission_required = "catalog:delete_product"
-    success_url = reverse_lazy("catalog:product_list")
+    success_url = reverse_lazy("catalog:home")
+
+    def get_object(self, queryset=None):
+        self.object = super().get_object(queryset)
+        user = self.request.user
+
+        if self.object.owner != user and not user.has_perm("catalog.delete_product") and not user.is_superuser:
+            raise PermissionDenied
+
+        return self.object
 
 
 class ProductTogglePublishView(PermissionRequiredMixin, View):
