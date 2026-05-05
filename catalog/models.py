@@ -35,6 +35,11 @@ class Product(models.Model):
         blank=True,
         null=True,
     )
+    is_published: models.BooleanField = models.BooleanField(
+        default=False,
+        verbose_name="Опубликовано",
+        help_text="Опубликовать продукт в каталоге",
+    )
 
     class Meta:
         verbose_name = "Продукт"
