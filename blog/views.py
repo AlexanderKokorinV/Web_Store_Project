@@ -1,6 +1,7 @@
 from typing import Optional
 
 from django.conf import settings
+from django.contrib.auth.mixins import PermissionRequiredMixin
 from django.core.mail import send_mail
 from django.db.models import QuerySet
 from django.urls import reverse, reverse_lazy
@@ -10,10 +11,10 @@ from blog.models import BlogPost
 
 
 # Create
-class BlogPostCreateView(CreateView):
+class BlogPostCreateView(PermissionRequiredMixin, CreateView):
     """Контроллер для создания новой блоговой записи"""
-
     model = BlogPost
+    permission_required = "blog.add_blogpost"
     template_name = "blog/blog_post_form.html"
     fields = ("title", "content", "preview", "is_published")
     success_url = reverse_lazy("blog:blog_post_list")
@@ -65,10 +66,11 @@ class BlogPostDetailView(DetailView):
 
 
 # Update
-class BlogPostUpdateView(UpdateView):
+class BlogPostUpdateView(PermissionRequiredMixin, UpdateView):
     """Контроллер для редактирования существующей блоговой записи"""
 
     model = BlogPost
+    permission_required = "blog.change_blogpost"
     fields = ("title", "content", "preview", "is_published")
     template_name = "blog/blog_post_form.html"
 
@@ -78,9 +80,10 @@ class BlogPostUpdateView(UpdateView):
 
 
 # Delete
-class BlogPostDeleteView(DeleteView):
+class BlogPostDeleteView(PermissionRequiredMixin, DeleteView):
     """Контроллер для удаления блоговой записи"""
 
     model = BlogPost
+    permission_required = "blog.delete_blogpost"
     template_name = "blog/blog_post_confirm_delete.html"
     success_url = reverse_lazy("blog:blog_post_list")
