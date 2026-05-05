@@ -13,6 +13,7 @@ from blog.models import BlogPost
 # Create
 class BlogPostCreateView(PermissionRequiredMixin, CreateView):
     """Контроллер для создания новой блоговой записи"""
+
     model = BlogPost
     permission_required = "blog.add_blogpost"
     template_name = "blog/blog_post_form.html"
