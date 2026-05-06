@@ -1,0 +1,47 @@
+{% extends "catalog/base.html" %}
+
+{% block title %}
+    {{ object.title }} - Web Store
+{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-8">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="{% url 'blog:blog_post_list' %}">Блог</a></li>
+                <li class="breadcrumb-item active">{{ object.title }}</li>
+            </ol>
+        </nav>
+
+        <article class="card shadow-sm p-4">
+            <h1 class="display-4">{{ object.title }}</h1>
+            
+            <p class="text-muted mb-4">
+                Опубликовано: {{ object.created_at|date:"d.m.Y" }} | 
+                <i class="bi bi-eye"></i> Просмотров: <strong>{{ object.views_count }}</strong>
+            </p>
+
+            {% if object.preview %}
+                <img src="{{ object.preview.url }}" class="img-fluid rounded mb-4" alt="{{ object.title }}">
+            {% endif %}
+
+            <div class="blog-post-content mb-4" style="font-size: 1.1rem; line-height: 1.6;">
+                {{ object.content|linebreaks }}
+            </div>
+
+            <hr>
+
+            <div class="d-flex justify-content-between align-items-center">
+                <a href="{% url 'blog:blog_post_list' %}" class="btn btn-outline-primary">
+                    &larr; Назад к списку
+                </a>
+                <div>
+                    <a href="{% url 'blog:blog_post_update' object.pk %}" class="btn btn-warning">Редактировать</a>
+                    <a href="{% url 'blog:blog_post_delete' object.pk %}" class="btn btn-danger">Удалить</a>
+                </div>
+            </div>
+        </article>
+    </div>
+</div>
+{% endblock %}
