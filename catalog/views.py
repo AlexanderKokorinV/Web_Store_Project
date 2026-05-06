@@ -21,6 +21,14 @@ class ProductListView(ListView):
     paginate_by = 3
     ordering = ["-created_at"]
 
+    def get_queryset(self):
+        return ProductService.get_all_products()
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["categories"] = ProductService.get_all_categories() # Получаем все категории для фильтров
+        return context
+
 @method_decorator(cache_page(60 * 15), name="dispatch") # Кеширование детальной страницы продукта на 15 мин.
 class ProductDetailView(LoginRequiredMixin, DetailView):
     model = Product
@@ -31,6 +39,7 @@ class ProductDetailView(LoginRequiredMixin, DetailView):
         context["title"] = f"Купить {self.object.product_name}"
         return context
 
+@method_decorator(cache_page(60 * 15), name="dispatch")
 class ProductsByCategoryListView(ListView):
     model = Product
     template_name = "catalog/products_by_category.html"
