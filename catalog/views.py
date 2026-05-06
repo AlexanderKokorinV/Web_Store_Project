@@ -5,11 +5,15 @@ from django.shortcuts import get_object_or_404, redirect
 from django.urls import reverse, reverse_lazy
 from django.views import View
 from django.views.generic import CreateView, DeleteView, DetailView, ListView, TemplateView, UpdateView
+from django.utils.decorators import method_decorator
+from django.views.decorators.cache import cache_page
 
 from .forms import ProductForm
-from .models import Contact, Product
+from .models import Contact, Product, Category
+from .services import ProductService
 
 
+@method_decorator(cache_page(60 * 15), name="dispatch") # Кеширование страницы списка продуктов на 15 мин.
 class ProductListView(ListView):
     model = Product
     template_name = "catalog/home.html"  # Путь к шаблону
@@ -17,7 +21,7 @@ class ProductListView(ListView):
     paginate_by = 3
     ordering = ["-created_at"]
 
-
+@method_decorator(cache_page(60 * 15), name="dispatch") # Кеширование детальной страницы продукта на 15 мин.
 class ProductDetailView(LoginRequiredMixin, DetailView):
     model = Product
     template_name = "catalog/product_detail.html"
@@ -27,6 +31,19 @@ class ProductDetailView(LoginRequiredMixin, DetailView):
         context["title"] = f"Купить {self.object.product_name}"
         return context
 
+class ProductsByCategoryListView(ListView):
+    model = Product
+    template_name = "catalog/products_by_category.html"
+    context_object_name = "products"
+
+    def get_queryset(self):
+        self.category_pk = self.kwargs.get("pk")
+        return ProductService.get_products_by_category(self.category_pk)
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["category"] = Category.objects.get(pk=self.category_pk)
+        return context
 
 class ProductCreateView(LoginRequiredMixin, CreateView):
     model = Product
