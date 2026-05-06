@@ -19,9 +19,13 @@ class ProductService:
     @staticmethod
     def get_products_by_category(category_id):
         """Возвращает список всех продуктов в указанной категории"""
-        products = Product.objects.filter(category_name_id=category_id)
-        if not products.exists():
-            return []
+
+        key = f"category_{category_id}"
+        products = cache.get(key)
+
+        if products is None:
+            products = list(Product.objects.filter(category_name_id=category_id))
+            cache.set(key, products, 60 * 15)
 
         return products
 
