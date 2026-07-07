@@ -3,7 +3,7 @@ from django.db import models
 
 
 class User(AbstractUser):
-    username = None  # Удаляем стандартное поле username
+    username = None
     email = models.EmailField(unique=True, verbose_name="email")
 
     phone_number = models.CharField(

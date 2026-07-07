@@ -129,7 +129,8 @@ USE_TZ = True
 
 STATIC_URL = "static/"
 
-STATICFILES_DIRS = (BASE_DIR / "static",)
+STATICFILES_DIRS = [os.path.join(BASE_DIR, "static")]
+STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")
 
 MEDIA_URL = "/media/"
 
@@ -156,8 +157,16 @@ DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
 CACHES = {
     "default": {
         "BACKEND": "django.core.cache.backends.redis.RedisCache",
-        "LOCATION": "redis://127.0.0.1:6379/1",
+        "LOCATION": "redis://redis:6379/1",
     }
 }
 
 CACHE_ENABLED = True
+
+# Настройки доверенных источников для проксирования через Nginx
+SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
+CSRF_TRUSTED_ORIGINS = [
+    "http://158.160.239.247", # Публичный IP виртуальной машины
+    "http://localhost",
+    "http://127.0.0.1",
+]
