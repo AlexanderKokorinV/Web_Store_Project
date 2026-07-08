@@ -44,7 +44,8 @@ class UserLoginForm(AuthenticationForm):
                 "class": "form-control",
                 "placeholder": "Введите ваш Email",
             }
-        )
+        ),
+        label="Email",
     )
     password = forms.CharField(
         widget=forms.PasswordInput(
@@ -52,8 +53,14 @@ class UserLoginForm(AuthenticationForm):
                 "class": "form-control",
                 "placeholder": "Введите пароль",
             }
-        )
+        ),
+        label="Пароль",
     )
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        if "username" in self.fields:
+            self.fields["username"].label = "Email"
 
 
 class UserProfileForm(forms.ModelForm):
