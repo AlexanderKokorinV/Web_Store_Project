@@ -8,7 +8,12 @@
                     <h4 class="mb-0">Регистрация</h4>
                 </div>
                 <div class="card-body">
-                    <form method="post">
+                    {% if form.errors %}
+                        <div class="alert alert-danger">
+                    {{ form.errors }}
+                        </div>
+                    {% endif %}
+                    <form method="post" action="{% url 'users:login' %}">
                         {% csrf_token %}
                         {% for field in form %}
                             <div class="mb-3">
