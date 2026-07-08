@@ -186,3 +186,9 @@ if "test" in sys.argv:
             "BACKEND": "django.core.cache.backends.locmem.LocMemCache",
         }
     }
+
+# Настройки для корректной работы сессий и авторизации по HTTP (без SSL)
+SESSION_COOKIE_SECURE = False
+CSRF_COOKIE_SECURE = False
+SESSION_COOKIE_SAMESITE = "Lax"
+CSRF_COOKIE_SAMESITE = "Lax"
