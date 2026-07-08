@@ -31,8 +31,7 @@ class UserRegisterView(CreateView):
         )
         user.save()
 
-        host = self.request.get_host()
-        url = f"http://{host}/users/email-confirm/{user.token}/"
+        url = f"http://158.160.239.247/users/email-confirm/{user.token}/"
 
         send_mail(
             subject="Подтверждение почты",
