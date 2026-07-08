@@ -200,3 +200,7 @@ SESSION_ENGINE = "django.contrib.sessions.backends.db"
 AUTHENTICATION_BACKENDS = [
     "django.contrib.auth.backends.ModelBackend",
 ]
+
+# Явно отключаем привязку кук к доменной зоне (критично для IP-адресов!)
+SESSION_COOKIE_DOMAIN = None
+CSRF_COOKIE_DOMAIN = None

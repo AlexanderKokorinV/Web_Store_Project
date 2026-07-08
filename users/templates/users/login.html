@@ -15,6 +15,12 @@
                 <div class="card-body">
                     <form method="post" action="{% url 'users:login' %}">
                         {% csrf_token %}
+                        {% if form.errors %}
+                            <div class="alert alert-danger">
+                                <strong>Ошибки формы:</strong>
+                                {{ form.errors }}
+                            </div>
+                        {% endif %}
                         {{ form.as_p }}
                         <div class="d-grid gap-2 mt-4">
                             <button type="submit" class="btn btn-primary">
