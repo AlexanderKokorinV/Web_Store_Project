@@ -34,7 +34,7 @@ jobs:
           virtualenvs-in-project: true
       # Шаг 4. Устанавливаем линтер flake8:
       - name: Install Lint Tools
-        run: poetry run pip install flake8
+        run: poetry install --no-root && poetry run pip install flake8
       # Шаг 5. Запускаем линтер Flake8 для всех python-файлов в проекте:
       - name: Run Flake8
         run: poetry run flake8 . --ignore=E501,F401 # Пропускаем длинные строки и неиспользуемые импорты для тестов
@@ -61,7 +61,7 @@ jobs:
           version: 2.2.1
       # Шаг 4. Устанавливаем зависимости:
       - name: Install dependencies
-        run: poetry install
+        run: poetry install --no-root
       # Шаг 5. Подменяем Postgres на тестовый SQLite
       - name: Run tests with SQLite
         env:
