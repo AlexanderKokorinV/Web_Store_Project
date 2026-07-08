@@ -7,7 +7,7 @@ class CatalogAccessMiddleware:
         self.get_response = get_response
 
     def __call__(self, request):
-
+        # Пропускаем системные папки статики, медиа и админки сразу
         if any(
             [
                 request.path.startswith("/admin/"),
@@ -17,6 +17,11 @@ class CatalogAccessMiddleware:
         ):
             return self.get_response(request)
 
+        # Если пользователь уже авторизован - отдаем страницу без проверок
+        if request.user.is_authenticated:
+            return self.get_response(request)
+
+        # Разрешения для неавторизованных гостей сайта
         allowed_paths = [
             reverse("catalog:home"),
             reverse("catalog:contacts"),
@@ -27,13 +32,12 @@ class CatalogAccessMiddleware:
             reverse("users:password_reset_complete"),
         ]
 
-        if not request.user.is_authenticated:
-            is_allowed_path = request.path in allowed_paths
-            is_confirm_email = request.path.startswith("/users/email-confirm/")
-            is_confirm_password = request.path.startswith("/users/password-reset-confirm/")
-            is_verification_path = request.path.startswith("/users/email-confirm/")
+        is_allowed_path = request.path in allowed_paths
+        is_confirm_email = request.path.startswith("/users/email-confirm/")
+        is_confirm_password = request.path.startswith("/users/password-reset-confirm/")
 
-            if not (is_allowed_path or is_verification_path or is_confirm_email or is_confirm_password):
-                return redirect(reverse("users:login"))
+        # Если гость пытается открыть закрытую страницу - отправляется на логин
+        if not (is_allowed_path or is_confirm_email or is_confirm_password):
+            return redirect(reverse("users:login"))
 
         return self.get_response(request)
