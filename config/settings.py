@@ -56,7 +56,7 @@ MIDDLEWARE = [
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
-    # "catalog.middleware.CatalogAccessMiddleware",
+    "catalog.middleware.CatalogAccessMiddleware",
 ]
 
 ROOT_URLCONF = "config.urls"
@@ -192,3 +192,11 @@ SESSION_COOKIE_SECURE = False
 CSRF_COOKIE_SECURE = False
 SESSION_COOKIE_SAMESITE = None
 CSRF_COOKIE_SAMESITE = None
+
+# Принудительно храним сессии авторизации в базе данных PostgreSQL, а не в Redis
+SESSION_ENGINE = "django.contrib.sessions.backends.db"
+
+# Явно указываем стандартный бэкенд авторизации для кастомной модели пользователя
+AUTHENTICATION_BACKENDS = [
+    "django.contrib.auth.backends.ModelBackend",
+]
