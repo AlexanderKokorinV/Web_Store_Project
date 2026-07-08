@@ -19,7 +19,7 @@ jobs:
     steps:
       # Шаг 1. Скачиваем актуальный код репозитория:
       - name: Check out code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
       # Шаг 2. Устанавливаем нужную версию Python:
       - name: Set up Python
         uses: actions/setup-python@v5
@@ -48,7 +48,7 @@ jobs:
     steps:
       # Шаг 1. Скачиваем актуальный код репозитория:
       - name: Check out code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
       # Шаг 2. Устанавливаем нужную версию Python:
       - name: Set up Python
         uses: actions/setup-python@v5
