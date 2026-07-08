@@ -16,6 +16,15 @@ RUN pip install --no-cache-dir poetry
 # 5. Копирование конфигурационных файлов зависимостей
 COPY pyproject.toml poetry.lock* ./
 
-# 6. Установка только основных зависимостей проекта через pip
+# 6. Установка зависимостей проекта
+RUN poetry install --no-root --no-directory
 
+# 7. Копируем остальной код приложения в контейнер
+COPY . .
+
+# 8. Открываем порт для приложения внутри сети Docker
+EXPOSE 8000
+
+# 9. Команда для запуска приложения
+CMD ["poetry", "run", "gunicorn", "config.wsgi:application", "--bind", "0.0.0.0:8000"]
 

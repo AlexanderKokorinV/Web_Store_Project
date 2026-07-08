@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/6.0/ref/settings/
 """
 
 import os
+import sys
 from pathlib import Path
 
 from dotenv import load_dotenv
@@ -30,7 +31,7 @@ SECRET_KEY = os.getenv("SECRET_KEY")
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True if os.getenv("DEBUG") == "True" else False
 
-ALLOWED_HOSTS = ["*"]
+ALLOWED_HOSTS = ["158.160.239.247", "localhost", "127.0.0.1"]
 
 
 # Application definition
@@ -166,7 +167,21 @@ CACHE_ENABLED = True
 # Настройки доверенных источников для проксирования через Nginx
 SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
 CSRF_TRUSTED_ORIGINS = [
-    "http://158.160.239.247", # Публичный IP виртуальной машины
+    "http://158.160.239.247",  # Публичный IP виртуальной машины
     "http://localhost",
     "http://127.0.0.1",
 ]
+
+# Если запущены тесты, принудительно переключаемся на встроенную базу и отключаем реальный Redis
+if "test" in sys.argv:
+    DATABASES = {
+        "default": {
+            "ENGINE": "django.db.backends.sqlite3",
+            "NAME": BASE_DIR / "db.sqlite3",
+        }
+    }
+    CACHES = {
+        "default": {
+            "BACKEND": "django.core.cache.backends.locmem.LocMemCache",
+        }
+    }

@@ -1,6 +1,7 @@
 from catalog.models import Product, Category
 from django.core.cache import cache
 
+
 class ProductService:
 
     @staticmethod

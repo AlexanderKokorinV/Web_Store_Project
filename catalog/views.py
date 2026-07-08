@@ -13,7 +13,7 @@ from .models import Contact, Product, Category
 from .services import ProductService
 
 
-@method_decorator(cache_page(60 * 15), name="dispatch") # Кеширование страницы списка продуктов на 15 мин.
+@method_decorator(cache_page(60 * 15), name="dispatch")  # Кеширование страницы списка продуктов на 15 мин.
 class ProductListView(ListView):
     model = Product
     template_name = "catalog/home.html"  # Путь к шаблону
@@ -26,10 +26,11 @@ class ProductListView(ListView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context["categories"] = ProductService.get_all_categories() # Получаем все категории для фильтров
+        context["categories"] = ProductService.get_all_categories()  # Получаем все категории для фильтров
         return context
 
-@method_decorator(cache_page(60 * 15), name="dispatch") # Кеширование детальной страницы продукта на 15 мин.
+
+@method_decorator(cache_page(60 * 15), name="dispatch")  # Кеширование детальной страницы продукта на 15 мин.
 class ProductDetailView(LoginRequiredMixin, DetailView):
     model = Product
     template_name = "catalog/product_detail.html"
@@ -38,6 +39,7 @@ class ProductDetailView(LoginRequiredMixin, DetailView):
         context = super().get_context_data(**kwargs)
         context["title"] = f"Купить {self.object.product_name}"
         return context
+
 
 @method_decorator(cache_page(60 * 15), name="dispatch")
 class ProductsByCategoryListView(ListView):
@@ -53,6 +55,7 @@ class ProductsByCategoryListView(ListView):
         context = super().get_context_data(**kwargs)
         context["category"] = Category.objects.get(pk=self.category_pk)
         return context
+
 
 class ProductCreateView(LoginRequiredMixin, CreateView):
     model = Product
