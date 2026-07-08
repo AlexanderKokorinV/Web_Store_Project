@@ -56,7 +56,7 @@ MIDDLEWARE = [
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
-    "catalog.middleware.CatalogAccessMiddleware",
+    # "catalog.middleware.CatalogAccessMiddleware",
 ]
 
 ROOT_URLCONF = "config.urls"
@@ -190,5 +190,5 @@ if "test" in sys.argv:
 # Настройки для корректной работы сессий и авторизации по HTTP (без SSL)
 SESSION_COOKIE_SECURE = False
 CSRF_COOKIE_SECURE = False
-SESSION_COOKIE_SAMESITE = "Lax"
-CSRF_COOKIE_SAMESITE = "Lax"
+SESSION_COOKIE_SAMESITE = None
+CSRF_COOKIE_SAMESITE = None
