@@ -165,7 +165,7 @@ CACHES = {
 CACHE_ENABLED = True
 
 # Настройки доверенных источников для проксирования через Nginx
-SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
+#SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
 CSRF_TRUSTED_ORIGINS = [
     "http://158.160.239.247",  # Публичный IP виртуальной машины
     "http://localhost",
