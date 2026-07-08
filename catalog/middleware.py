@@ -19,6 +19,7 @@ class CatalogAccessMiddleware:
 
         allowed_paths = [
             reverse("catalog:home"),
+            reverse("catalog:contacts"),
             reverse("users:login"),
             reverse("users:register"),
             reverse("users:password_reset"),
