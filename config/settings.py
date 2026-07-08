@@ -157,12 +157,12 @@ DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
 
 CACHES = {
     "default": {
-        "BACKEND": "django.core.cache.backends.redis.RedisCache",
+        "BACKEND": "django.core.cache.backends.dummy.DummyCache",
         "LOCATION": "redis://redis:6379/1",
     }
 }
 
-CACHE_ENABLED = True
+CACHE_ENABLED = False
 
 # Настройки доверенных источников для проксирования через Nginx
 # SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
