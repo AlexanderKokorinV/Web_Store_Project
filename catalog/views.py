@@ -4,6 +4,7 @@ from django.core.exceptions import PermissionDenied
 from django.shortcuts import get_object_or_404, redirect
 from django.urls import reverse, reverse_lazy
 from django.views import View
+from django.views.decorators.vary import vary_on_cookie
 from django.views.generic import CreateView, DeleteView, DetailView, ListView, TemplateView, UpdateView
 from django.utils.decorators import method_decorator
 from django.views.decorators.cache import cache_page
@@ -14,6 +15,7 @@ from .services import ProductService
 
 
 @method_decorator(cache_page(60 * 15), name="dispatch")  # Кеширование страницы списка продуктов на 15 мин.
+@method_decorator(vary_on_cookie, name="dispatch")
 class ProductListView(ListView):
     model = Product
     template_name = "catalog/home.html"  # Путь к шаблону
@@ -31,6 +33,7 @@ class ProductListView(ListView):
 
 
 @method_decorator(cache_page(60 * 15), name="dispatch")  # Кеширование детальной страницы продукта на 15 мин.
+@method_decorator(vary_on_cookie, name="dispatch")
 class ProductDetailView(LoginRequiredMixin, DetailView):
     model = Product
     template_name = "catalog/product_detail.html"
@@ -42,6 +45,7 @@ class ProductDetailView(LoginRequiredMixin, DetailView):
 
 
 @method_decorator(cache_page(60 * 15), name="dispatch")
+@method_decorator(vary_on_cookie, name="dispatch")
 class ProductsByCategoryListView(ListView):
     model = Product
     template_name = "catalog/products_by_category.html"
