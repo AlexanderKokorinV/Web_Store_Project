@@ -157,12 +157,12 @@ DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
 
 CACHES = {
     "default": {
-        "BACKEND": "django.core.cache.backends.dummy.DummyCache",
+        "BACKEND": "django.core.cache.backends.redis.RedisCache",
         "LOCATION": "redis://redis:6379/1",
     }
 }
 
-CACHE_ENABLED = False
+CACHE_ENABLED = True
 
 # Настройки доверенных источников для проксирования через Nginx
 # SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
@@ -193,14 +193,15 @@ CSRF_COOKIE_SECURE = False
 SESSION_COOKIE_SAMESITE = None
 CSRF_COOKIE_SAMESITE = None
 
-# Принудительно храним сессии авторизации в базе данных PostgreSQL, а не в Redis
+# Принудительно храним сессии авторизации в db, а не в Redis
 SESSION_ENGINE = "django.contrib.sessions.backends.db"
 
 # Явно указываем стандартный бэкенд авторизации для кастомной модели пользователя
+# без поля username
 AUTHENTICATION_BACKENDS = [
     "django.contrib.auth.backends.ModelBackend",
 ]
 
-# Явно отключаем привязку кук к доменной зоне (критично для IP-адресов!)
+# Явно отключаем привязку куки к доменной зоне
 SESSION_COOKIE_DOMAIN = None
 CSRF_COOKIE_DOMAIN = None

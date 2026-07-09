@@ -24,7 +24,7 @@ class ProductListView(ListView):
     ordering = ["-created_at"]
 
     def get_queryset(self):
-        return Product.objects.all()
+        return ProductService.get_all_products()
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)

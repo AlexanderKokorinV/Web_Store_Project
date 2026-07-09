@@ -1,7 +1,10 @@
 from typing import Any
 
 from django.conf import settings
+from django.core.cache import cache
 from django.db import models
+from django.db.models.signals import post_save, post_delete
+from django.dispatch import receiver
 
 
 class Product(models.Model):
@@ -86,3 +89,9 @@ class Contact(models.Model):
 
     def __str__(self) -> Any:
         return f"{self.country} {self.inn}"
+
+
+@receiver([post_save, post_delete], sender=Product)
+def clear_product_cache(sender, instance, **kwargs):
+    """Автоматически стирает кэш списка товаров при их создании, изменении или удалении"""
+    cache.delete("all_products_list")
