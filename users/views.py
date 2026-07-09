@@ -58,6 +58,7 @@ class CustomLoginView(LoginView):
     form_class = UserLoginForm
     template_name = "users/login.html"
     success_url = reverse_lazy("catalog:home")
+    redirect_authenticated_user = True
 
 
 class ProfileUpdateView(LoginRequiredMixin, SuccessMessageMixin, UpdateView):
