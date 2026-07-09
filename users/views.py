@@ -15,6 +15,8 @@ from users.models import User
 
 
 class UserRegisterView(CreateView):
+    """Контроллер для регистрации пользователя"""
+
     model = User
     form_class = UserRegisterForm
     template_name = "users/register.html"
@@ -51,11 +53,16 @@ def email_verification(request, token):
 
 
 class CustomLoginView(LoginView):
+    """Контроллер для входа пользователя"""
+
     form_class = UserLoginForm
     template_name = "users/login.html"
+    success_url = reverse_lazy("catalog:home")
 
 
 class ProfileUpdateView(LoginRequiredMixin, SuccessMessageMixin, UpdateView):
+    """Контроллер для обновления профиля"""
+
     form_class = UserProfileForm
     template_name = "users/profile.html"
     success_url = reverse_lazy("users:profile")
